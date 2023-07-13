@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TxtToSpeech</title>
+  <style>
+    body {
+      width: 99vw;
+      height: 99.97vh;
+      
+      background-color: black;
+      outline: 3px solid transparent;
+      
+      padding: 0;
+      margin: 0;
+      
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content:center ;
+      align-items: center ;
+    }
+    p {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+    .txt-scrn, .txt-scrn2 {
+      margin : 1rem  ;
+    }
+    .txt-scrn2 {
+      font-size : 1.35rem  ;
+    }
+    .div1 {
+      margin: 0;
+      padding: 0;
+      height: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center ;
+      align-items: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      outline: 2px solid transparent;
+    }
+    .div2 {
+      width: 98vw;
+      height: 80vh;
+      
+      margin:  0 ;
+      padding: 0 ;
+      
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: lightgray;
+      background-color: darkblue ;
+      outline : 2px solid pink ;
+      
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start ;
+      align-items: center;
+    }
+/*
+    .inv {
+      color: transparent;
+    }
+    */
+    .btns-wrapper{
+      display:flex;
+      flex-direction:row ;
+      flex-wrap:nowrap;
+      justify-content:center;
+      align-items:center ;
+    }
+    .start,
+    .stop,
+    .erase {
+      display:block;
+      outline: 1px solid transparent;
+      margin: 0.1rem;
+      background-color: transparent;
+      border: 2px solid #ffd400;
+      border-radius: 15%;
+      font-size: 1rem;
+      font-weight: bolder;
+      padding: 0.5rem;
+      color: white;
+      margin: 1vh 2vw 0 auto;
+    }
+    .start:active,
+.stop:active,
+.erase:active {
+  background-color: green ;
+  color: lightyellow ;
+  outline :2px solid yellow ;
+}
+    .author {
+      padding: 0.5rem;
+      display: block;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="div1">
+    <p>Oreja 👂🏻 Virtual</p>
+  </div>
+  <div class="div2">
+    <!--
+    <p class="inv">
+      invisible
+    </p>
+    -->
+    <p class="txt-scrn">
+      ¡Espepita! 🙂</p>
+          <p class="txt-scrn2">
+      Las pausas en la conversación van a detener el proceso de reconocimiento. Esto causa que el sistema ignore la conversación mientras finaliza la transcripción. Para evitar perdidas, las pausas en la conversación deben alargarse a aproximadamente 3 segundos. En la practica se debe usar estilo walkie-talkie.
+    </p>
+        <!--
+    <p class="inv">
+      invisible
+    </p>
+    -->
+  </div>
+  <div class="btns-wrapper">
+      <button class="start">OIGA</button>
+  <button class="stop">PARE</button>
+  <button class="erase">BORRE</button>
+  </div>
+  <p class='author'>Por: Martín Mejía</p>
+  <script>
+    "use strict";
+    const html = document.querySelector('html'); // The root html of the document
+   requestFullScreen();
+  function requestFullScreen(){
+// Check if the Fullscreen API is supported by the browser
+if (html.requestFullscreen) {
+  // Request full screen mode
+  html.requestFullscreen();
+} else if (html.mozRequestFullScreen) { // Firefox
+  html.mozRequestFullScreen();
+} else if (html.webkitRequestFullscreen) { // Chrome, Safari, Opera, and Brave
+  if (html.webkitRequestFullscreen === html.requestFullscreen) {
+    // Request full screen mode (Brave browser)
+    html.requestFullscreen();
+  } else {
+    // Request full screen mode (Chrome, Safari, Opera)
+    html.webkitRequestFullscreen();
+  }
+} else if (html.msRequestFullscreen) { // Internet Explorer and Edge
+  html.msRequestFullscreen();
+}
+}
+    let recognition;
+    let recognitonStopped=false;
+    const element = document.querySelector('.txt-scrn2');
+    let txtScrn = document.querySelector('.txt-scrn');
+    let start = document.querySelector('.start');
+    start.addEventListener('click', () => {
+      recognitonStopped=false;
+      element.remove();
+      txtScrn.innerText = 'Dime mijo...'
+      doSpeechRecognition();
+    });
+    let stop = document.querySelector('.stop');
+    stop.addEventListener('click', () => {
+      recognition.stop();
+      recognitonStopped=true 
+      txtScrn.innerText = '!Espepita! 🙂';
+     ;
+    });
+    let erase = document.querySelector('.erase');
+    erase.addEventListener('click', () => {
+      if(recognition)
+      {
+      clearTextScreen();
+      }
+    });
+recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.lang = 'es-US';
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+    function doSpeechRecognition() {
+      recognition.start();
+      recognition.onresult = function (event) {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        txtScrn.innerHTML = finalTranscript + '<span style="color: darkgray;">' + interimTranscript + '</span>';
+      };
+      recognition.onend = function () {
+        if(recognitonStopped)
+        {
+          recognition.stop();
+        }
+        else
+        {
+          //doSpeechRecognition(); // Restart speech recognition when it ends
+        recognition.start();
+        }
+      };
+    }
+    function clearTextScreen() {
+      txtScrn.innerText = '';
+      element.remove();
+      txtScrn.style.color = 'darkgray';
+    }
+  </script>
+</body>
+</html>
+
