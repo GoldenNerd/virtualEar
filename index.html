@@ -158,6 +158,8 @@ if (html.requestFullscreen) {
 }
     let recognition;
     let recognitonStopped=false;
+    let firstTxt = "";
+    let lastTxt = "";
     const element = document.querySelector('.txt-scrn2');
     let txtScrn = document.querySelector('.txt-scrn');
     let start = document.querySelector('.start');
@@ -198,7 +200,8 @@ recognition = new webkitSpeechRecognition();
             interimTranscript += event.results[i][0].transcript;
           }
         }
-        txtScrn.innerHTML = finalTranscript + '<span style="color: darkgray;">' + interimTranscript + '</span>';
+        lastTxt = finalTranscript + interimTranscript ;
+        
       };
       recognition.onend = function () {
         if(recognitonStopped)
@@ -208,12 +211,17 @@ recognition = new webkitSpeechRecognition();
         else
         {
           //doSpeechRecognition(); // Restart speech recognition when it ends
-        recognition.start();
+          firstTxt = txtScrn.innerText;
+          txtScrn.innerHTML = firstTxt + " 🔸 " +lastTxt;
+          firstTxt = lastTxt = "";
+          recognition.start();
         }
       };
     }
     function clearTextScreen() {
       txtScrn.innerText = '';
+      firstTxt = "";
+    lastTxt = "";
       element.remove();
       txtScrn.style.color = 'darkgray';
     }
