@@ -8,8 +8,13 @@
     body {
       width: 99vw;
       height: 99.97vh;
+      background-color: #0d0920;
       
-      background-color: black;
+      background-image: url('5073414.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+      
       outline: 3px solid transparent;
       
       padding: 0;
@@ -41,7 +46,7 @@
       flex-wrap: nowrap;
       justify-content: center ;
       align-items: center;
-      color: white;
+      color:  gray  ;
       font-size: 2rem;
       font-weight: bold;
       outline: 2px solid transparent;
@@ -55,9 +60,9 @@
       
       font-size: 1.5rem;
       font-weight: bold;
-      color: lightgray;
-      background-color: darkblue ;
-      outline : 2px solid pink ;
+      color: lightgray  ;
+      background-color: transparent ;
+      outline : 2px solid black ;
       
       display: flex;
       flex-direction: column;
@@ -81,28 +86,28 @@
     .stop,
     .erase, .reload {
       display:block;
-      outline: 1px solid transparent;
+      
       margin: 0.1rem;
       background-color: transparent;
-      border: 2px solid #ffd400;
+      outline : 1px solid lightgray ;
       border-radius: 15%;
       font-size: 1rem;
       font-weight: bolder;
       padding: 0.5rem;
-      color: white;
+      color:  gray  ;
       margin: 1vh 2vw 0 auto;
     }
     .start:active,
 .stop:active,
 .erase:active, .reload:active {
-  background-color: green ;
-  color: lightyellow ;
-  outline :2px solid yellow ;
+  background-color: #000000 ;
+  color:  darkgreen  ;
+  outline :1px solid #ffd400 ;
 }
     .author {
       padding: 0.5rem;
       display: block;
-      color: white;
+      color:  gray  ;
     }
   </style>
 </head>
@@ -116,7 +121,7 @@
       invisible
     </p>
     -->
-    <p class="txt-scrn">
+    <p class="txt-scrn" style="color: gray;">
       ¡Espepita! 🙂</p>
           <p class="txt-scrn2">
       Las pausas en la conversación van a detener el proceso de reconocimiento. Esto causa que el sistema ignore la conversación mientras finaliza la transcripción. Para evitar perdidas, las pausas en la conversación deben alargarse a aproximadamente 3 segundos. En la practica se debe usar estilo walkie-talkie.
@@ -232,5 +237,4 @@ recognition = new webkitSpeechRecognition();
   </script>
 </body>
 </html>
-
 
